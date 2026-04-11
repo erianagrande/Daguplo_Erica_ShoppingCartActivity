@@ -6,6 +6,6 @@ namespace Daguplo_Erica_ShoppingCartActivity
 {
     internal class Product
     {
-        // magsulat nga anything
+        // magsulat ng anything
     }
 }

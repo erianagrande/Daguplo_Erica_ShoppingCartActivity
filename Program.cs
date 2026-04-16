@@ -118,3 +118,34 @@ while (continueShopping)
         continueShopping = false;
     }
 }
+
+Console.WriteLine("\n===== RECEIPT =====");
+
+foreach (var item in cart)
+{
+    Console.WriteLine($"{item.Product.Name}x{item.Quantity} = ₱{item.Total}");
+}
+
+Console.WriteLine("---------------------");
+Console.WriteLine($"Grand Total: ₱{grandTotal}");
+
+double discount = 0;
+
+if (grandTotal >= 5000)
+{
+    discount = grandTotal * 0.10;
+}
+
+double finalTotal = grandTotal - discount;
+
+Console.WriteLine($"Discount: ₱{discount}");
+Console.WriteLine($"Final Total: ₱{finalTotal}");
+
+Console.WriteLine("\n===== UPDATED STOCK =====");
+
+foreach (Product p in products)
+{
+    Console.WriteLine($"{p.Name} - Stock left: {p.RemainingStock}");
+}
+
+

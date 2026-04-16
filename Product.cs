@@ -45,6 +45,9 @@ namespace Daguplo_Erica_ShoppingCartActivity
             return Price * quantity;
         }
 
+        
+            
+
        
 
     }

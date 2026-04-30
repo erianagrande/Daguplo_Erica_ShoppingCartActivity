@@ -3,13 +3,16 @@
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 
-List<CartItem> cart = new List<CartItem>();
+int cartSize = 5 ;
+Product[] cart = new Product[cartSize];
+int[] quantities = new int[cartSize];
+int cartCount = 0;
 double grandTotal = 0;
 bool continueShopping = true;
 
 Product[] products = new Product[]
 { 
-    new Product(1, "Peptide Lip Care", 250, 0),
+    new Product(1, "Peptide Lip Care", 250, 10),
     new Product(2, "Lipliner", 199, 10),
     new Product(3, "Liquid Blush", 225, 10),
     new Product(4, "Waterproof Mascara", 199, 10),
@@ -21,23 +24,23 @@ Console.WriteLine(" Welcome to Eri the Label!");
 Console.WriteLine("---------------------------");
 
 while (continueShopping)
-
 {
-
     // DISPLAY MENU
+    Console.WriteLine("\n===== OUR PRODUCTS =====");
+
     foreach (Product p in products)
     {
-        p.DisplayProduct();
+        Console.WriteLine($"{p.Id}. {p.Name} - ₱{p.Price} (Stock: {p.RemainingStock})");
     }
+
 
     // USER INPUT
     Console.Write("\nEnter product number:");
     int productNum = int.Parse(Console.ReadLine());
 
-    // DECLARE selected here
+    // FIND PRODUCT
     Product selected = null;
 
-    // FIND SELECTED PRODUCT
     foreach (Product p in products)
     {
         if (p.Id == productNum)
@@ -46,6 +49,7 @@ while (continueShopping)
             break;
         }
     }
+
     // VALIDATION
     if (selected == null)
     {
@@ -56,7 +60,7 @@ while (continueShopping)
     // OUT OF STOCK CHECKKK
     if (selected.RemainingStock == 0)
     {
-        Console.WriteLine("We're sorry, the product is out of stock :(");
+        Console.WriteLine("The product is out of stock! We're sorry.");
         continue;
     }
 
@@ -68,48 +72,52 @@ while (continueShopping)
     if (quantity > selected.RemainingStock)
     {
         Console.WriteLine("Insufficient Stock available.");
-        Console.WriteLine($" Only {selected.RemainingStock} item(s) left.");
+        continue;
+    }
+    
+    // CART FULL CHECK
+    if (cartCount >= cartSize)
+    {
+        Console.WriteLine("Cart is full! Sadly, you can no longer add more items.");
         continue;
     }
 
-    // COMPUTE ITEM'S TOTAL
-    double itemTotal = selected.Price * quantity;
+    // ADD TO CART 
+    bool found = false;
 
-    // ADD TO CART
-    CartItem existingItem = null;
-
-    foreach (var item in cart)
+    for (int i = 0; i < cartCount; i++)
     {
-        if (item.Product.Id == selected.Id)
+        if (cart[i].Id == selected.Id)
         {
-            existingItem = item;
-            break;
+            quantities[i] += quantity;
+            found = true;
+            break; 
         }
+
     }
 
-    if (existingItem != null)
+    if (!found)
     {
-        existingItem.Quantity += quantity;
-    }
-    else
-    {
-        cart.Add(new CartItem
-        {
-            Product = selected,
-            Quantity = quantity
-        });
+        cart[cartCount] = selected;
+        quantities[cartCount] = quantity;
+        cartCount++;
     }
 
     // DEDUCT STOCK
     selected.DeductStock(quantity);
 
-    // ADD TO GRAND TOTAL
-    grandTotal += itemTotal;
-
     // CONFIRMATION MESSAGE
     Console.WriteLine("Item added to cart successfully!");
 
-    // QUESTIONNN
+    // DISPLAY CART 
+    Console.WriteLine("\n--- CART ---");
+
+    for (int i = 0; i < cartCount; i++)
+    {
+        Console.WriteLine($"{cart[i].Name} x{quantities[i]}");
+    }
+
+    // CONTINUE?
     Console.Write("Do you want to add more items? (y/n): ");
     string choice = Console.ReadLine().ToLower();
 
@@ -119,15 +127,24 @@ while (continueShopping)
     }
 }
 
+// RECEIPT
+
 Console.WriteLine("\n===== RECEIPT =====");
 
-foreach (var item in cart)
+grandTotal = 0;
+
+for (int i = 0; i < cartCount; i++)
 {
-    Console.WriteLine($"{item.Product.Name}x{item.Quantity} = ₱{item.Total}");
+    double total = cart[i].Price * quantities[i];
+    grandTotal += total;
+
+    Console.WriteLine($"{cart[i].Name} x{quantities[i]} = ₱{total}");
 }
 
 Console.WriteLine("---------------------");
 Console.WriteLine($"Grand Total: ₱{grandTotal}");
+
+// DISCOUNT
 
 double discount = 0;
 
@@ -141,11 +158,15 @@ double finalTotal = grandTotal - discount;
 Console.WriteLine($"Discount: ₱{discount}");
 Console.WriteLine($"Final Total: ₱{finalTotal}");
 
+// UPDATED STOCK !
+
 Console.WriteLine("\n===== UPDATED STOCK =====");
 
 foreach (Product p in products)
 {
     Console.WriteLine($"{p.Name} - Stock left: {p.RemainingStock}");
 }
+
+
 
 

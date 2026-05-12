@@ -22,7 +22,7 @@ namespace Daguplo_Erica_ShoppingCartActivity
         }
 
         // Display product details
-        public void DisplayProduct()
+        public void DisplayProduct() 
         {
             Console.WriteLine($"{Id}. {Name} - \u20B1{Price} (Stock: {RemainingStock})");
         } 

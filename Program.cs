@@ -35,7 +35,7 @@ while (isRunning)
     Console.WriteLine("6. Exit");
 
     Console.Write("Choose option: ");
-    int option = int.Parse(Console.ReadLine());
+    int option = int.Parse(Console.ReadLine()!);
 
     switch (option)
     {
@@ -47,17 +47,17 @@ while (isRunning)
 
             foreach (Product p in products)
             {
-                Console.WriteLine($"{p.Id}. {p.Name} - ₱{p.Price} (Stock: {p.RemainingStock})");
+                Console.WriteLine($"{p.GetId()}. {p.GetName()} - ₱{p.GetPrice()} (Stock: {p.GetRemainingStock()})");
             }
 
             Console.Write("\nEnter product number:");
-            int productNum = int.Parse(Console.ReadLine());
+            int productNum = int.Parse(Console.ReadLine()!);
 
-            Product selected = null;
+            Product? selected = null;
 
             foreach (Product p in products)
             {
-                if (p.Id == productNum)
+                if (p.GetId() == productNum)
                 {
                     selected = p;
                     break;
@@ -70,16 +70,16 @@ while (isRunning)
                 break;
             }
 
-            if (selected.RemainingStock == 0)
+            if (selected.GetRemainingStock() == 0)
             {
                 Console.WriteLine("The product is out of stock! We're sorry.");
                 break;
             }
 
             Console.Write("Enter quantity: ");
-            int quantity = int.Parse(Console.ReadLine());
+            int quantity = int.Parse(Console.ReadLine()!);
 
-            if (quantity > selected.RemainingStock)
+            if (quantity > selected.GetRemainingStock())
             {
                 Console.WriteLine("Not enough stock!");
                 break;
@@ -95,7 +95,7 @@ while (isRunning)
 
             for (int i = 0; i < cartCount; i++)
             {
-                if (cart[i].Id == selected.Id)
+                if (cart[i].GetId() == selected.GetId())
                 {
                     quantities[i] += quantity;
                     found = true;
@@ -129,7 +129,7 @@ while (isRunning)
 
             for (int i = 0; i < cartCount; i++)
             {
-                Console.WriteLine($"{i + 1}. {cart[i].Name} x{quantities[i]}");
+                Console.WriteLine($"{i + 1}. {cart[i].GetName()} x{quantities[i]}");
             }
             break;
 
@@ -138,7 +138,7 @@ while (isRunning)
         case 3:
 
             Console.Write("Enter item number to remove: ");
-            int removeIndex = int.Parse(Console.ReadLine()) - 1;
+            int removeIndex = int.Parse(Console.ReadLine()!) - 1;
 
             if (removeIndex >= 0 && removeIndex < cartCount)
             {
@@ -159,12 +159,12 @@ while (isRunning)
         case 4:
 
             Console.Write("Enter item number: ");
-            int updateIndex = int.Parse(Console.ReadLine()) - 1;
+            int updateIndex = int.Parse(Console.ReadLine()!) - 1;
 
             if (updateIndex >= 0 && updateIndex < cartCount)
             {
                 Console.Write("New quantity: ");
-                int newQty = int.Parse(Console.ReadLine());
+                int newQty = int.Parse(Console.ReadLine()!);
 
                 quantities[updateIndex] = newQty;
 
@@ -206,10 +206,10 @@ grandTotal = 0;
 
 for (int i = 0; i < cartCount; i++)
 {
-    double total = cart[i].Price * quantities[i];
+    double total = cart[i].GetPrice() * quantities[i];
     grandTotal += total;
 
-    Console.WriteLine($"{cart[i].Name} x{quantities[i]} = ₱{total}");
+    Console.WriteLine($"{cart[i].GetName()} x{quantities[i]} = ₱{total}");
 }
 
 Console.WriteLine("---------------------");
@@ -235,7 +235,7 @@ Console.WriteLine("\n===== UPDATED STOCK =====");
 
 foreach (Product p in products)
 {
-    Console.WriteLine($"{p.Name} - Stock left: {p.RemainingStock}");
+    Console.WriteLine($"{p.GetName()} - Stock left: {p.GetRemainingStock()}");
 }
 
 

@@ -7,49 +7,97 @@ namespace Daguplo_Erica_ShoppingCartActivity
     internal class Product
     {
         // Properties
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public int RemainingStock { get; set; }
+        private int id;
+        private string name;
+        private double price;
+        private int remainingStock;
 
         // Constructor
         public Product(int id, string name, double price, int stock)
         {
-            Id = id;
-            Name = name;
-            Price = price;
-            RemainingStock = stock;
+            this.id = id;
+            this.name = name;
+            this.price = price;
+            this.remainingStock = stock;
         }
 
-        // Display product details
-        public void DisplayProduct() 
-        {
-            Console.WriteLine($"{Id}. {Name} - \u20B1{Price} (Stock: {RemainingStock})");
-        } 
+        public void SetName(string name) 
+        { 
+            this.name = name;
+        }
 
-        // Check if the stock is enough
+        public string GetName() 
+        { 
+            return this.name; 
+        }
+
+        public void SetId(int id)
+        {
+            this.id = id;
+        }
+
+        public int GetId()
+        {
+            return this.id;
+        }
+
+        public void SetPrice(double price)
+        {
+            this.price = price;
+        }
+
+        public double GetPrice()
+        {
+            return this.price;
+        }
+        public void SetRemainingStock(int remainingStock)
+        {
+            this.remainingStock = remainingStock;
+        }
+
+        public int GetRemainingStock()
+        {
+            return this.remainingStock;
+        }
+
+        // DISPLAY PRODUCT DETAILS
+
+        public void DisplayProduct()
+        {
+            Console.WriteLine($"{id}. {name} - ₱{price} (Stock: {remainingStock})");
+        }
+
+        // CHECK IF STOCK IS ENOUGH
+
         public bool HasEnoughStock(int quantity)
         {
-            return quantity <= RemainingStock;
+            return quantity <= remainingStock;
         }
 
-        // Deduct Stock
+        // DEDUCT STOCK
+
         public void DeductStock(int quantity)
         {
-            RemainingStock -= quantity;
+            remainingStock -= quantity;
         }
 
-        // Compute total price for item 
+        // RESTOCK
+
+        public void Restock(int quantity)
+        {
+            remainingStock += quantity;
+        }
+
+        // COMPUTE ITEM TOTAL
+
         public double GetItemTotal(int quantity)
         {
-            return Price * quantity;
+            return price * quantity;
         }
     }
-    class CartItem
-    {
-        public Product Product { get; set; }
-        public int Quantity { get; set; }
 
-        public double Total => Product.Price * Quantity;
-    }
+
+
+
+
 }
